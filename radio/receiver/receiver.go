@@ -1,8 +1,8 @@
-package radio
+package receiver
 
 import (
-	"github.com/apolon13/TinyGoRadio/radio/protocol"
-	"github.com/apolon13/TinyGoRadio/radio/protocol/receive"
+	"github.com/apolon13/TinyGoRadio/radio/receiver/protocol"
+	"github.com/apolon13/TinyGoRadio/radio/receiver/protocol/receive"
 	"time"
 )
 

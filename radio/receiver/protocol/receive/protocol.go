@@ -1,6 +1,8 @@
 package receive
 
-import "github.com/apolon13/TinyGoRadio/radio/protocol"
+import (
+	"github.com/apolon13/TinyGoRadio/radio/receiver/protocol"
+)
 
 const (
 	MaxChangesCount    = 67

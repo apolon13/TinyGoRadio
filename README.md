@@ -17,16 +17,16 @@ go get github.com/apolon13/TinyGoRadio/radio
 package main
 
 import (
-	"github.com/apolon13/TinyGoRadio/radio"
+	"github.com/apolon13/TinyGoRadio/radio/receiver"
 	"machine"
 )
 
 func main() {
-	receiver := radio.NewDefaultReceiver(nil)
+	r := receiver.NewDefaultReceiver(nil)
 	pin := machine.GPIO6
 	pin.Configure(machine.PinConfig{Mode: machine.PinInput})
 	pin.SetInterrupt(machine.PinToggle, func(pin machine.Pin) {
-		if code := receiver.Listen(); code != 0 {
+		if code := r.Listen(); code != 0 {
 			println(code)
 		}
 	})
@@ -38,7 +38,7 @@ func main() {
 package main
 
 import (
-	"github.com/apolon13/TinyGoRadio/radio"
+	"github.com/apolon13/TinyGoRadio/radio/receiver"
 	"machine"
 )
 
@@ -53,12 +53,12 @@ func (p CustomProtocol) Decode(timings []int64) int64  {
 
 func main() {
 	customProtocol := CustomProtocol{}
-	receiver := radio.NewReceiverWithProtocols([]radio.Protocol{customProtocol}, nil)
+	r := receiver.NewReceiverWithProtocols([]receiver.Protocol{customProtocol}, nil)
 
 	pin := machine.GPIO6
 	pin.Configure(machine.PinConfig{Mode: machine.PinInput})
 	pin.SetInterrupt(machine.PinToggle, func(pin machine.Pin) {
-		if code := receiver.Listen(); code != 0 {
+		if code := r.Listen(); code != 0 {
 			println(code)
 		}
 	})
@@ -70,7 +70,7 @@ func main() {
 package main
 
 import (
-	"github.com/apolon13/TinyGoRadio/radio"
+	"github.com/apolon13/TinyGoRadio/radio/receiver"
 	"machine"
 )
 
@@ -80,14 +80,13 @@ func main() {
 	var diffBetweenTwoTransmit int64 = 300
 	var requiredRepeatCount int8 = 3
 
-	receiver := radio.NewDefaultReceiver(radio.NewConfig(minStartSignalDuration, diffBetweenTwoTransmit, requiredRepeatCount), )
+	r := receiver.NewDefaultReceiver(receiver.NewConfig(minStartSignalDuration, diffBetweenTwoTransmit, requiredRepeatCount))
 	pin := machine.GPIO6
 	pin.Configure(machine.PinConfig{Mode: machine.PinInput})
 	pin.SetInterrupt(machine.PinToggle, func(pin machine.Pin) {
-		if code := receiver.Listen(); code != 0 {
+		if code := r.Listen(); code != 0 {
 			println(code)
 		}
 	})
 }
-
 ```
