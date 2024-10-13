@@ -1,7 +1,7 @@
 ## Description
 
-Build Your Own 315/433 MHz AM Receiver and Transmitter with TinyGo.
-The library y is based on the [rс-switch](https://github.com/sui77/rc-switch)
+Build Your Own 315/433 MHz AM Receiver and Transmitter on TinyGo and golang.
+The library is based on the [rс-switch](https://github.com/sui77/rc-switch), but with some minor modifications.
 Currently it only supports the receiver mode.
 
 ## Install
