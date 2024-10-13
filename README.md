@@ -1,7 +1,7 @@
 ## Install
 
 ```sh
-go get -u github.com/gorilla/mux
+go get github.com/apolon13/TinyGoRadio/radio
 ```
 
 ## Examples
