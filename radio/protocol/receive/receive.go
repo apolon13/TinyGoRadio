@@ -1,7 +1,7 @@
 package receive
 
 import (
-	"github.com/apolon13/TinyGoRadio/radio/receiver/protocol"
+	"github.com/apolon13/TinyGoRadio/radio/protocol"
 )
 
 const (

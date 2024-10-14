@@ -1,8 +1,8 @@
 package receiver
 
 import (
-	"github.com/apolon13/TinyGoRadio/radio/receiver/protocol"
-	"github.com/apolon13/TinyGoRadio/radio/receiver/protocol/receive"
+	"github.com/apolon13/TinyGoRadio/radio/protocol"
+	"github.com/apolon13/TinyGoRadio/radio/protocol/receive"
 	"time"
 )
 
@@ -12,7 +12,7 @@ const (
 	RequiredRepeatCount    = 2
 )
 
-type Protocol interface {
+type Decoder interface {
 	Decode(timings []int64) int64
 }
 
@@ -43,7 +43,7 @@ type Receiver struct {
 	changesCount  int8
 	lastInterrupt int64
 	timings       []int64
-	protocols     []Protocol
+	protocols     []Decoder
 	config        Config
 }
 
@@ -56,7 +56,7 @@ func NewDefaultReceiver(config *Config) Receiver {
 	return Receiver{
 		timings: make([]int64, receive.MaxChangesCount),
 		config:  *config,
-		protocols: []Protocol{
+		protocols: []Decoder{
 			receive.New(protocol.HighLow{High: 1, Low: 31}, protocol.HighLow{High: 1, Low: 3}, protocol.HighLow{High: 3, Low: 1}, false),
 			receive.New(protocol.HighLow{High: 1, Low: 10}, protocol.HighLow{High: 1, Low: 2}, protocol.HighLow{High: 2, Low: 1}, false),
 			receive.New(protocol.HighLow{High: 30, Low: 71}, protocol.HighLow{High: 4, Low: 11}, protocol.HighLow{High: 9, Low: 6}, false),
@@ -73,7 +73,7 @@ func NewDefaultReceiver(config *Config) Receiver {
 	}
 }
 
-func NewReceiverWithProtocols(protocols []Protocol, config *Config) Receiver {
+func NewReceiverWithProtocols(protocols []Decoder, config *Config) Receiver {
 	if config == nil {
 		config = DefaultConfig()
 	}

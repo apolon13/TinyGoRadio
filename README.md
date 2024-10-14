@@ -33,7 +33,7 @@ func main() {
 }
 ```
 
-### Create your custom protocol
+### Create your custom protocol decoder
 ```go
 package main
 
@@ -43,18 +43,16 @@ import (
 )
 
 type CustomProtocol struct {
-
 }
 
-func (p CustomProtocol) Decode(timings []int64) int64  {
+func (p CustomProtocol) Decode(timings []int64) int64 {
 	//handle your timings and return code
 	return 0
 }
 
 func main() {
 	customProtocol := CustomProtocol{}
-	r := receiver.NewReceiverWithProtocols([]receiver.Protocol{customProtocol}, nil)
-
+	r := receiver.NewReceiverWithProtocols([]receiver.Decoder{customProtocol}, nil)
 	pin := machine.GPIO6
 	pin.Configure(machine.PinConfig{Mode: machine.PinInput})
 	pin.SetInterrupt(machine.PinToggle, func(pin machine.Pin) {
@@ -63,6 +61,7 @@ func main() {
 		}
 	})
 }
+
 ```
 
 ### Custom receiver config
