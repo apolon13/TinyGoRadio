@@ -1,9 +1,10 @@
 package receiver
 
 import (
+	"time"
+
 	"github.com/apolon13/TinyGoRadio/radio/protocol"
 	"github.com/apolon13/TinyGoRadio/radio/protocol/receive"
-	"time"
 )
 
 const (
@@ -110,6 +111,11 @@ func (r *Receiver) handleTimestamp(timestamp int64) int64 {
 				r.resetRepeat()
 			}
 		}
+
+		if r.repeatCount > r.config.requiredRepeatCount {
+			r.resetRepeat()
+		}
+
 		//Clear counter if receive long signal
 		r.resetChanges()
 	}
