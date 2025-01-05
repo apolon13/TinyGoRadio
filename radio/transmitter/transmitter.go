@@ -45,9 +45,9 @@ func NewTransmitter(config *Config) Transmitter {
 	return Transmitter{*config}
 }
 
-func (t Transmitter) Send(code int, pin machine.Pin, protocol Informative) {
+func (t Transmitter) Send(code int64, pin machine.Pin, protocol Informative) {
 	pin.Configure(machine.PinConfig{Mode: machine.PinOutput})
-	binaryView := strconv.FormatInt(int64(code), 2)
+	binaryView := strconv.FormatInt(code, 2)
 	for range t.config.requiredRepeatCount {
 		for _, b := range binaryView {
 			switch b {
