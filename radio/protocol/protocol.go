@@ -48,7 +48,7 @@ func (p Protocol) PulseLength() int16 {
 	return p.pulseLength
 }
 
-func (p Protocol) delay(startSignalTiming int64) int64 {
+func (p Protocol) delimiter(startSignalTiming int64) int64 {
 	syncLengthInPulses := p.syncFactor.High
 	if p.syncFactor.Low > p.syncFactor.High {
 		syncLengthInPulses = p.syncFactor.Low
@@ -56,17 +56,17 @@ func (p Protocol) delay(startSignalTiming int64) int64 {
 	return startSignalTiming / int64(syncLengthInPulses)
 }
 
-func (p Protocol) isZero(timing, next, delay, tolerance int64) bool {
-	return (timing-(delay*int64(p.zero.High))) < tolerance && (next-delay*int64(p.zero.Low)) < tolerance
+func (p Protocol) isZero(timing, next, delimiter, tolerance int64) bool {
+	return (timing-(delimiter*int64(p.zero.High))) < tolerance && (next-delimiter*int64(p.zero.Low)) < tolerance
 }
 
-func (p Protocol) isOne(timing, next, delay, tolerance int64) bool {
-	return (timing-(delay*int64(p.one.High))) < tolerance && (next-delay*int64(p.one.Low)) < tolerance
+func (p Protocol) isOne(timing, next, delimiter, tolerance int64) bool {
+	return (timing-(delimiter*int64(p.one.High))) < tolerance && (next-delimiter*int64(p.one.Low)) < tolerance
 }
 
 func (p Protocol) Decode(timings []int64) int64 {
-	delay := p.delay(timings[0])
-	tolerance := delay * 60 / 100
+	delimiter := p.delimiter(timings[0])
+	tolerance := delimiter * 60 / 100
 	var code int64 = 0
 	firstData := 1
 	if p.inverted {
@@ -77,8 +77,8 @@ func (p Protocol) Decode(timings []int64) int64 {
 		timing := timings[i]
 		next := timings[i+1]
 		code <<= 1
-		if p.isZero(timing, next, delay, tolerance) {
-		} else if p.isOne(timing, next, delay, tolerance) {
+		if p.isZero(timing, next, delimiter, tolerance) {
+		} else if p.isOne(timing, next, delimiter, tolerance) {
 			code |= 1
 		} else {
 			return 0
