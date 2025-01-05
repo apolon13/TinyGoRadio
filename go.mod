@@ -1,3 +1,3 @@
 module github.com/apolon13/TinyGoRadio
 
-go 1.22
+go 1.23
