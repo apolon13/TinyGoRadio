@@ -124,10 +124,9 @@ import (
 
 
 func main() {
-	transmitter := transmitter.NewTransmitter(nil)
-	pin := machine.GPIO6
+	transmitter := transmitter.NewTransmitter(machine.GPIO6, nil)
 	for {
-		transmitter.Send(15858700, pin, protocol.New(
+		transmitter.SendCode(15858700, protocol.New(
 			350,
 			protocol.HighLow{High: 1, Low: 31},
 			protocol.HighLow{High: 1, Low: 3},

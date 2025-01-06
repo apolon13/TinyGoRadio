@@ -36,45 +36,46 @@ func DefaultConfig() *Config {
 
 type Transmitter struct {
 	config Config
+	pin    machine.Pin
 }
 
-func NewTransmitter(config *Config) Transmitter {
+func NewTransmitter(pin machine.Pin, config *Config) Transmitter {
 	if config == nil {
 		config = DefaultConfig()
 	}
-	return Transmitter{*config}
+	pin.Configure(machine.PinConfig{Mode: machine.PinOutput})
+	return Transmitter{*config, pin}
 }
 
-func (t Transmitter) Send(code int64, pin machine.Pin, protocol Informative) {
-	pin.Configure(machine.PinConfig{Mode: machine.PinOutput})
+func (t Transmitter) SendCode(code int64, protocol Informative) {
 	binaryView := strconv.FormatInt(code, 2)
 	for range t.config.requiredRepeatCount {
 		for _, b := range binaryView {
 			switch b {
 			case '0':
-				t.transmit(pin, protocol, protocol.Zero())
+				t.pulse(protocol, protocol.Zero())
 			default:
-				t.transmit(pin, protocol, protocol.One())
+				t.pulse(protocol, protocol.One())
 			}
 		}
-		t.transmit(pin, protocol, protocol.SyncFactor())
+		t.pulse(protocol, protocol.SyncFactor())
 	}
-	pin.Low()
+	t.pin.Low()
 }
 
-func (t Transmitter) transmit(pin machine.Pin, protocol Informative, pulse protocol.HighLow) {
+func (t Transmitter) pulse(protocol Informative, desc protocol.HighLow) {
 	switch protocol.Inverted() {
 	case true:
-		pin.Low()
+		t.pin.Low()
 	default:
-		pin.High()
+		t.pin.High()
 	}
-	time.Sleep(time.Duration(protocol.PulseLength()*pulse.High) * time.Microsecond)
+	time.Sleep(time.Duration(protocol.PulseLength()*desc.High) * time.Microsecond)
 	switch protocol.Inverted() {
 	case true:
-		pin.High()
+		t.pin.High()
 	default:
-		pin.Low()
+		t.pin.Low()
 	}
-	time.Sleep(time.Duration(protocol.PulseLength()*pulse.Low) * time.Microsecond)
+	time.Sleep(time.Duration(protocol.PulseLength()*desc.Low) * time.Microsecond)
 }
