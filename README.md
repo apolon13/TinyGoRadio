@@ -7,7 +7,7 @@ Supports the receiver and transmit mode.
 ## Install
 
 ```sh
-go get github.com/apolon13/TinyGoRadio/radio
+go get github.com/apolon13/TinyGoRadio
 ```
 
 ## Examples
